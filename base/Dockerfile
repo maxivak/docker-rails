@@ -11,8 +11,7 @@ ENV APT_PACKAGES " \
   git imagemagick gcc g++ make patch binutils libc6-dev libjemalloc-dev \
   libffi-dev libssl-dev libyaml-dev zlib1g-dev libgmp-dev libxml2-dev \
   libxslt1-dev libpq-dev libreadline-dev libsqlite3-dev libmysqlclient-dev \
-  tzdata yarn \
-"
+  tzdata yarn "
 
 ENV APT_REMOVE_PACKAGES "anacron cron openssh-server postfix"
 
@@ -45,6 +44,7 @@ RUN npm install bower@${BOWER_VERSION} -g
 RUN rm /etc/my_init.d/00_regen_ssh_host_keys.sh
 RUN rm -r /etc/service/sshd /etc/service/cron
 
+# copy scripts
 COPY wait-for-syslog.sh /opt/
 COPY db_migrate.sh /etc/my_init.d/90_db_migrate.sh
 COPY sidekiq.sh /etc/service/sidekiq/run
@@ -57,7 +57,9 @@ COPY clockwork.rb /etc/
 
 COPY rails-assets.sh /opt/
 
+# app
 RUN useradd -m app
 RUN mkdir /home/app/webapp && chown app:app -R /home/app
 
-RUN rm -rf /tmp/* /var/tmp/* /var/lib/apt /var/lib/dpkg /usr/share/man /usr/share/doc
+
+#RUN rm -rf /tmp/* /var/tmp/* /var/lib/apt /var/lib/dpkg /usr/share/man /usr/share/doc
