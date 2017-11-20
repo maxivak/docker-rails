@@ -1,6 +1,8 @@
 #!/bin/bash
 
-cd /home/app/webapp
+APP_DIR="${APP_DIR:-default '/home/app/webapp'}"
+
+cd $APP_DIR
 
 bundle show clockwork || sleep infinity
 
