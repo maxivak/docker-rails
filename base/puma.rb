@@ -29,5 +29,6 @@ before_fork do
   ActiveRecord::Base.connection_pool.disconnect! if defined?(ActiveRecord)
 end
 
-custom_config = '/home/app/webapp/config/puma.rb'
+app_base_dir = ENV.fetch('APP_DIR', '/home/app/webapp')
+custom_config = File.join(app_base_dir, 'config/puma.rb')
 instance_eval(File.read(custom_config)) if File.exist?(custom_config)

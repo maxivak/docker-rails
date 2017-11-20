@@ -121,7 +121,12 @@ created gzipped versions of the assets. Rails then uses these static gzip files 
 Have a look at the [ONBUILD Dockerfile](onbuild/Dockerfile) for more details.
 
 ### Environment Variables
-All environment variables are passed on the application. Both `RAILS_ENV` and `RACK_ENV` are
+
+All environment variables are passed on the application. 
+
+* `APP_DIR` - by default /home/app/webapp
+
+* Both `RAILS_ENV` and `RACK_ENV` are
 set to `production` and should not be changed.
 
 Both `RAILS_SERVE_STATIC_FILES` and
