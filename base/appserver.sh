@@ -1,6 +1,8 @@
 #!/bin/bash
 
-APP_DIR="${APP_DIR:-default '/home/app/webapp'}"
+APP_DIR="${APP_DIR:/home/app/webapp}"
+
+#APP_DIR="${APP_DIR:-default '/home/app/webapp'}"
 
 cd $APP_DIR
 
