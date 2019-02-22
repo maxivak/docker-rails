@@ -8,7 +8,7 @@ ENV NODE_VERSION "6.10.1"
 ENV BOWER_VERSION "1.8.0"
 
 ENV APT_PACKAGES " \
-  git imagemagick gcc g++ make patch binutils libc6-dev libjemalloc-dev \
+  wget git imagemagick gcc g++ make patch binutils libc6-dev libjemalloc-dev \
   libffi-dev libssl-dev libyaml-dev zlib1g-dev libgmp-dev libxml2-dev \
   libxslt1-dev libpq-dev libreadline-dev libsqlite3-dev libmysqlclient-dev \
   tzdata yarn "
@@ -20,8 +20,27 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 COPY yarn.list /etc/apt/sources.list.d
 RUN apt-get update && apt-get -y dist-upgrade
 RUN apt-get install -y --no-install-recommends $APT_PACKAGES
+
+
+# imagemagick
+RUN apt-get install -y librsvg2-bin
+
+#
+WORKDIR /tmp
+RUN wget https://imagemagick.org/download/ImageMagick-7.0.8-28.tar.gz && \
+    tar xvzf ImageMagick-7.0.8-28.tar.gz && \
+    cd ImageMagick-7.0.8-28 && \
+    ./configure --with-rsvg=yes && \
+    make && \
+    make install && \
+    ldconfig /usr/local/lib
+
+
+
+#
 RUN apt-get remove --purge -y $APT_REMOVE_PACKAGES
 RUN apt-get autoremove --purge -y
+
 
 WORKDIR /tmp
 RUN curl -o ruby.tgz \

@@ -2,6 +2,13 @@
 
 ## master (unreleased)
 
+
+## 2019-feb
+
+* imagemagick svg support with rsvg
+
+
+
 ## 2.6.2 (2017-09-13)
 
 - Add `LIBRATO_AUTORUN` to sidekiq environment

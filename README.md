@@ -1,8 +1,6 @@
 # Docker-Rails
-[![Circle CI](https://circleci.com/gh/ad2games/docker-rails.svg?style=svg)]
-(https://circleci.com/gh/ad2games/docker-rails)
 
-An opinionated docker image for running Rails apps in production.
+Docker image for running Rails apps in production.
 
 Uses Puma, Sidekiq, Clockwork and rails_migrate_mutex.
 Everything is optional.
