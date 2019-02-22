@@ -8,7 +8,7 @@ ENV NODE_VERSION "6.10.1"
 ENV BOWER_VERSION "1.8.0"
 
 ENV APT_PACKAGES " \
-  wget git imagemagick gcc g++ make patch binutils libc6-dev libjemalloc-dev \
+  wget git gcc g++ make patch binutils libc6-dev libjemalloc-dev \
   libffi-dev libssl-dev libyaml-dev zlib1g-dev libgmp-dev libxml2-dev \
   libxslt1-dev libpq-dev libreadline-dev libsqlite3-dev libmysqlclient-dev \
   tzdata yarn "
@@ -22,15 +22,48 @@ RUN apt-get update && apt-get -y dist-upgrade
 RUN apt-get install -y --no-install-recommends $APT_PACKAGES
 
 
-# imagemagick
-RUN apt-get install -y librsvg2-bin
+# libs for imagemagick
+# jpg
+RUN cd /tmp  && \
+    wget http://www.ijg.org/files/jpegsrc.v8c.tar.gz && \
+    tar xvfz jpegsrc.v8c.tar.gz && \
+    cd jpeg-* && \
+    ./configure --enable-shared --prefix=$CONFIGURE_PREFIX && \
+    make && \
+    make install
 
-#
+
+RUN apt-get -y update && \
+        apt-get -y upgrade
+
+RUN apt-get install -y ocl-icd-libopencl1 opencl-headers  clinfo ocl-icd-opencl-dev \
+    libpng16-16 libpng-dev  libturbojpeg  libjpeg-dev \
+    librsvg2-bin \
+    libjpeg-dev \
+      libtool \
+      libperl-dev \
+      pkg-config autoconf
+
+
+
+
+
+
+# imagemagick
 WORKDIR /tmp
+
 RUN wget https://imagemagick.org/download/ImageMagick-7.0.8-28.tar.gz && \
     tar xvzf ImageMagick-7.0.8-28.tar.gz && \
     cd ImageMagick-7.0.8-28 && \
-    ./configure --with-rsvg=yes && \
+    ./configure --with-autotrace=no  --with-gslib=yes  --with-fontpath=  \
+                  --enable-delegate-build=yes  --enable-shared  --enable-static   --with-modules=yes \
+                  --without-perl --without-magick-plus-plus --disable-openmp \
+                  --with-bzlib=yes \
+                  --with-jpeg=yes \
+                  --with-png=yes \
+                  --with-tiff=yes \
+                  --with-xml=yes \
+                  --with-rsvg=yes   && \
     make && \
     make install && \
     ldconfig /usr/local/lib
